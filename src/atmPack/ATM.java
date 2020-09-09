@@ -60,6 +60,44 @@ public class ATM extends Object {
         this.twenties = twenties;
     }
 
+    /**
+     * Setters and getter methods
+     */
+
+    public int getHundreds() {
+        return hundreds;
+    }
+
+    public void setHundreds(int hundreds) {
+        this.hundreds = hundreds;
+    }
+
+    public int getFifties() {
+        return fifties;
+    }
+
+    public void setFifties(int fifties) {
+        this.fifties = fifties;
+    }
+
+    public int getTwenties() {
+        return twenties;
+    }
+
+    public void setTwenties(int twenties) {
+        this.twenties = twenties;
+    }
+
+    public static boolean isSuspend() {
+        return suspend;
+    }
+
+    public static void setSuspend(boolean suspend) {
+        ATM.suspend = suspend;
+    }
+
+
+
     private static int convertToDollars(ATM temp) {
         return (temp.hundreds * 100) + (temp.fifties * 50) +
                 (temp.twenties * 20);
