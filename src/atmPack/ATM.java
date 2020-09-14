@@ -28,6 +28,9 @@ public class ATM extends Object {
      */
     private int twenties;
 
+    /**
+     * Suspending all ATMs if boolean suspend is true
+     */
     private static boolean suspend = false;
 
     public ATM() {
@@ -44,18 +47,18 @@ public class ATM extends Object {
      *  the parameters.
      *
      *
-     * @param hundries the initial number of hundreds in the ATM
+     * @param hundreds the initial number of hundreds in the ATM
      * @param fifties the initial number of fifties in the ATM
      * @param twenties the initial number of twenties in the ATM
      * @throws IllegalArgumentException with negative parameters
      *
      *****************************************************************/
-    public ATM(int hundries, int fifties, int twenties) {
+    public ATM(int hundreds, int fifties, int twenties) {
 
-        if (hundries < 0 || fifties < 0 || twenties < 0)
+        if (hundreds < 0 || fifties < 0 || twenties < 0)
             throw new IllegalArgumentException();
 
-        this.hundreds = hundries;
+        this.hundreds = hundreds;
         this.fifties = fifties;
         this.twenties = twenties;
     }
@@ -69,6 +72,8 @@ public class ATM extends Object {
     }
 
     public void setHundreds(int hundreds) {
+        if(this.hundreds < 0)
+            throw new IllegalArgumentException();
         this.hundreds = hundreds;
     }
 
@@ -77,6 +82,8 @@ public class ATM extends Object {
     }
 
     public void setFifties(int fifties) {
+        if(this.fifties < 0)
+            throw new IllegalArgumentException();
         this.fifties = fifties;
     }
 
@@ -85,6 +92,8 @@ public class ATM extends Object {
     }
 
     public void setTwenties(int twenties) {
+        if(this.twenties < 0)
+            throw new IllegalArgumentException();
         this.twenties = twenties;
     }
 
@@ -96,7 +105,51 @@ public class ATM extends Object {
         ATM.suspend = suspend;
     }
 
+    public boolean equals(Object other){
+        //put a throw error statement first once you figure out this method
 
+        ATM differentOne = new ATM((ATM) other);
+
+        if(this.hundreds == differentOne.getHundreds() && this.fifties == differentOne.getFifties()
+                && twenties == differentOne.getTwenties())
+                    return true;
+        else
+            return false;
+    }
+
+    public static boolean equals(ATM other1, ATM other2){
+        // throw error if either of the ATMs have negatives or are null
+        ATM s1 = new ATM(other1);
+        ATM s2 = new ATM(other2);
+
+        if(s1.getHundreds() == s2.getHundreds() && s1.getFifties() == s2.getFifties()
+                && s1.getTwenties() == s2.getTwenties())
+                return true;
+        else
+            return false;
+    }
+
+    public int compareTo(ATM other){
+
+        if(convertToDollars(this) > convertToDollars(other))
+            return 1;
+        else if(convertToDollars(this) < convertToDollars(other))
+            return -1;
+        else
+            return 0;
+    }
+
+    public static int compareTo(ATM other1, ATM other2){
+        ATM s1 = new ATM(other1);
+        ATM s2 = new ATM(other2);
+
+        if(convertToDollars(s1) > convertToDollars(s2))
+            return 1;
+        else if(convertToDollars(s1) < convertToDollars(s2))
+            return -1;
+        else
+            return 0;
+    }
 
     private static int convertToDollars(ATM temp) {
         return (temp.hundreds * 100) + (temp.fifties * 50) +
@@ -110,6 +163,10 @@ public class ATM extends Object {
     }
 
     public void takeOut(ATM other) {
+
+        this.hundreds -= other.hundreds;
+        this.fifties -= other.fifties;
+        this.twenties -= other.twenties;
     }
 
     public ATM takeOut(int totalAmount) {
@@ -122,11 +179,11 @@ public class ATM extends Object {
         this.twenties += other.twenties;
     }
 
-    public void putIn(int hunderies, int fifties, int twenties) {
+    public void putIn(int hundreds, int fifties, int twenties) {
         if (suspend)
             return;
 
-        this.hundreds += hunderies;
+        this.hundreds += hundreds;
         this.fifties += fifties;
         this.twenties += twenties;
     }
