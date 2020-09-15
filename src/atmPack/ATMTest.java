@@ -106,23 +106,23 @@ public class ATMTest {
 		s1 = new ATM();  // resets to zero
 
 		s1.load("file1");
-		System.out.println(s1);
-		System.out.println(s2);
+		//System.out.println(s1);
+		//System.out.println(s2);
 		assertTrue(s1.equals(s2));
 
 	}
 
 
-//	@Test
-//	public void testMutate() {
-//		ATM s1 = new ATM(6, 5, 4);
-//		ATM.suspend(true);
-//		s1.takeOut(120);
-//		assertEquals(6, s1.getHundreds());
-//		assertEquals(5, s1.getFifties());
-//		assertEquals(4, s1.getTwenties());
-//		ATM.suspend(false);
-//	}
+	@Test
+	public void testMutate() {
+		ATM s1 = new ATM(6, 5, 4);
+		ATM.suspend(true);
+		s1.takeOut(120);
+		assertEquals(6, s1.getHundreds());
+		assertEquals(5, s1.getFifties());
+		assertEquals(4, s1.getTwenties());
+		ATM.suspend(false);
+	}
 
 	// IMPORTANT: only one test per exception!!!
 	// testing negative number for nickels, takeOut
@@ -134,22 +134,23 @@ public class ATMTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testConstructorNegHunderies1() {
+	public void testConstructorNegHundreds1() {
 		new ATM(-300, 0, 0);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testConstructorNegHunderies2() {
+	public void testConstructorNegHundreds2() {
 		new ATM(300, -10, 0);
 	}
 
 	// testing negative number for quarters, putIn
 	@Test(expected = IllegalArgumentException.class)
-	public void testPutInNeghunderies() {
+	public void testPutInNegHundreds() {
 		ATM s = new ATM(2, 3, 4);
 		s.putIn(-30, 2, 30);
 	}
 
+	@Test
 	public void testEquals() {
 		ATM s1 = new ATM(2, 3, 4);
 		ATM s2 = new ATM(2, 3, 4);

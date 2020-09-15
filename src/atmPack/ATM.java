@@ -307,18 +307,14 @@ public class ATM extends Object {
     }
 
     public void save(String fileName) {
-//        PrintWriter out = null;
-//        try {
-//            out = new PrintWriter(new BufferedWriter(new FileWriter(
-//                    fileName)));
-        try{
-            FileWriter file = new FileWriter(fileName);
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(new BufferedWriter(new FileWriter(
+                    fileName)));
 
-            BufferedWriter output = new BufferedWriter(file);
+            out.write(this.hundreds + " " + this.fifties + " " + this.twenties);
 
-            output.write(this.hundreds + " " + this.fifties + " " + this.twenties);
-
-            output.close();
+            out.close();
 
         } catch (IOException e) {
             throw new IllegalArgumentException();
