@@ -97,12 +97,16 @@ public class ATM extends Object {
         this.twenties = twenties;
     }
 
-    public static boolean isSuspend() {
-        return suspend;
-    }
+    //do we need a get method
+//    public static boolean isSuspend() {
+//        return suspend;
+//    }
 
-    public static void setSuspend(boolean suspend) {
-        ATM.suspend = suspend;
+    public static void suspend(Boolean on) {
+        if(on == true)
+            suspend = true;
+        else
+            suspend = false;
     }
 
     public boolean equals(Object other){
@@ -119,11 +123,9 @@ public class ATM extends Object {
 
     public static boolean equals(ATM other1, ATM other2){
         // throw error if either of the ATMs have negatives or are null
-        ATM s1 = new ATM(other1);
-        ATM s2 = new ATM(other2);
 
-        if(s1.getHundreds() == s2.getHundreds() && s1.getFifties() == s2.getFifties()
-                && s1.getTwenties() == s2.getTwenties())
+        if(other1.hundreds == other2.hundreds && other1.fifties == other2.fifties
+                && other1.twenties == other2.twenties)
                 return true;
         else
             return false;
@@ -140,12 +142,9 @@ public class ATM extends Object {
     }
 
     public static int compareTo(ATM other1, ATM other2){
-        ATM s1 = new ATM(other1);
-        ATM s2 = new ATM(other2);
-
-        if(convertToDollars(s1) > convertToDollars(s2))
+        if(convertToDollars(other1) > convertToDollars(other2))
             return 1;
-        else if(convertToDollars(s1) < convertToDollars(s2))
+        else if(convertToDollars(other1) < convertToDollars(other2))
             return -1;
         else
             return 0;
@@ -157,23 +156,117 @@ public class ATM extends Object {
     }
 
     public void takeOut(int hundred, int fifties, int twenties) {
+        if (suspend)
+            return;
+
+        if (hundreds < 0 || fifties < 0 || twenties < 0)
+            throw new IllegalArgumentException();
+
         this.hundreds -= hundred;
         this.fifties -= fifties;
         this.twenties -= twenties;
     }
 
     public void takeOut(ATM other) {
+        if (suspend)
+            return;
 
         this.hundreds -= other.hundreds;
         this.fifties -= other.fifties;
         this.twenties -= other.twenties;
     }
 
+    //this code is only supposed to be 9 lines according to prof lol
     public ATM takeOut(int totalAmount) {
-        throw new IllegalArgumentException();
+        if(totalAmount < 0)
+            throw new IllegalArgumentException();
+        if(suspend)
+            return null;
+
+        int amountThisATM = (this.hundreds * 100) + (this.fifties * 50) + (this.twenties * 20);
+
+        if (totalAmount < 0 || (totalAmount % 10) != 0 || amountThisATM < totalAmount)
+            throw new IllegalArgumentException();
+
+        ATM temp = new ATM();
+        int hundred = 0, fifty = 0, twenty = 0, leftOver1 = 0, leftOver2 = 0, leftAmount = 0;
+        // check for 100$ bill
+        hundred = totalAmount / 100;
+        if (this.hundreds < hundred) {   // if hundreds bill isn't enough
+            //int diff100 = hundred - this.hundreds;
+            temp.setHundreds(this.hundreds);
+            leftOver1 = (totalAmount - this.hundreds * 100);
+            this.setHundreds(0);
+        } else { //this.hundreds >= hundred
+            leftOver1 = (totalAmount - hundred * 100);
+            this.setHundreds(this.hundreds - hundreds);
+        }
+
+        //
+        if (leftOver1 / 100 >= 1){ // if there still hundred needed but no more 100$ bill (ex: 120)
+            fifty = leftOver1 / 50;
+            if (this.fifties < fifty){ // if fifties bill isn't enough
+                //int diff50 = fifty - this.fifties;
+                temp.setFifties(this.fifties);
+                leftOver2 = (leftOver1 - fifty * 50);
+                this.setFifties(0);
+            }
+            else { // if fifties bill is enough or more
+                leftOver2 = (leftOver1 - fifty * 50);
+                temp.setFifties(fifty);
+                this.setFifties(this.fifties - fifty);
+            }
+            twenty = leftOver2 / 20;
+            temp.setTwenties(twenty);
+            this.setTwenties(this.twenties - twenty);
+
+        }
+
+        else{ //(leftOver1 / 100 < 1) // if there is no hundred left and no 100$ bill left (ex: 50)
+            if (leftOver1 >= 50) {
+                if ((leftOver1 / 10) % 2 == 0) {
+                    fifty = 0;
+                    twenty = leftOver1 / 20;
+                    temp.setFifties(0);
+                    temp.setTwenties(twenty);
+                    this.setTwenties(this.twenties - twenty);
+
+
+                } else { //if (leftOver1 / 10)%2 != 0
+                    fifty = leftOver1 / 50;
+                    if (this.fifties < fifty) { // if fifties bill isn't enough
+                        throw new IllegalArgumentException();
+                    }
+                    else {
+                        temp.setFifties(fifty);
+                        this.setFifties(this.fifties - fifty);
+                        twenty = (leftOver1 - fifty * 50) / 20;
+                        if (this.twenties < twenty) { // if twenty bill isn't enough
+                            throw new IllegalArgumentException();
+                        }
+                        temp.setTwenties(twenty);
+                        this.setTwenties(this.twenties - twenty);
+                    }
+                }
+            }
+            if (leftOver1 < 50) {
+                fifty = 0;
+                temp.setFifties(0);
+                twenty = leftOver1 / 20;
+                if (this.twenties < twenty) { // if fifties bill isn't enough
+                    throw new IllegalArgumentException();
+                }
+                temp.setTwenties(twenty);
+                this.setTwenties(this.twenties - twenty);
+
+            }
+        }
+        return temp;
     }
 
     public void putIn(ATM other) {
+        if (suspend)
+            return;
         this.hundreds += other.hundreds;
         this.fifties += other.fifties;
         this.twenties += other.twenties;
@@ -182,6 +275,9 @@ public class ATM extends Object {
     public void putIn(int hundreds, int fifties, int twenties) {
         if (suspend)
             return;
+
+        if (hundreds < 0 || fifties < 0 || twenties < 0)
+            throw new IllegalArgumentException();
 
         this.hundreds += hundreds;
         this.fifties += fifties;
@@ -196,30 +292,54 @@ public class ATM extends Object {
 
     public String toString() {
         String s = this.hundreds + " hundred dollar bill";
-        if (hundreds != 1)
+        if (hundreds != 1) {
             s += "s";
+        }
+        String d = this.fifties + " fifty dollar bill";
+        if (fifties != 1) {
+            d += "s";
+        }
+        String f = this.twenties + " twenty dollar bill";
+        if (twenties != 1)
+            f += "s";
 
-        return s;
+        return s + ", " + d + ", " + f + ".";
     }
 
     public void save(String fileName) {
+//        PrintWriter out = null;
+//        try {
+//            out = new PrintWriter(new BufferedWriter(new FileWriter(
+//                    fileName)));
+        try{
+            FileWriter file = new FileWriter(fileName);
 
-        PrintWriter out = null;
-        try {
-            out = new PrintWriter(new BufferedWriter(new FileWriter(
-                    fileName)));
+            BufferedWriter output = new BufferedWriter(file);
+
+            output.write(this.hundreds + " " + this.fifties + " " + this.twenties);
+
+            output.close();
+
         } catch (IOException e) {
             throw new IllegalArgumentException();
         }
 
-        out.close();
+        //out.close();
     }
 
     public void load(String fileName) {
+        hundreds = 0;
+        fifties = 0;
+        twenties = 0;
 
-        Scanner scanner = null;
+        //Scanner scanner = null;
         try {
-            scanner = new Scanner(new File(fileName));
+            Scanner scanner = new Scanner(new File(fileName));
+                hundreds = scanner.nextInt();
+                fifties = scanner.nextInt();
+                twenties = scanner.nextInt();
+                ATM loaded = new ATM(hundreds,fifties,twenties);
+
         } catch (FileNotFoundException e) {
             throw new IllegalArgumentException();
         }
