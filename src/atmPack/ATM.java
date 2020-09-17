@@ -1,4 +1,4 @@
-package F20Project1GIVETOSTUDENTS;
+package atmPack;
 /********************************************************
  *
  * Describe the class here
@@ -116,7 +116,7 @@ public class ATM extends Object {
 				if (this.twenties == temp.twenties && this.fifties == temp.fifties
 						&& this.hundreds == temp.hundreds)
 					return true;
-				 else
+				else
 					return false;
 
 			}
@@ -183,6 +183,7 @@ public class ATM extends Object {
 	/*******
 	 * A method that adds ATM other to the this ATM object
 	 * @param other
+	 * If we add to this ATM, shouldn't ATM other become empty?
 	 */
 	public void putIn(ATM other) {
 		if(suspend)
@@ -190,8 +191,11 @@ public class ATM extends Object {
 		if(other == null)
 			throw new IllegalArgumentException();
 		this.hundreds += other.hundreds;
+		//other.hundreds = 0;
 		this.fifties += other.fifties;
+		//other.fifties = 0;
 		this.twenties += other.twenties;
+		//other.twenties = 0;
 	}
 
 	/*******
