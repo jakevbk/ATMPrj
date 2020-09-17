@@ -1,4 +1,4 @@
-package atmPack;
+package F20Project1GIVETOSTUDENTS;
 /********************************************************
  *
  * Describe the class here
@@ -88,38 +88,44 @@ public class ATM extends Object {
 	 *  the parameters.
 	 *
 	 *
-	 * @param hundries the initial number of hundreds in the ATM
+	 * @param hundreds the initial number of hundreds in the ATM
 	 * @param fifties the initial number of fifties in the ATM
 	 * @param twenties the initial number of twenties in the ATM
 	 * @throws IllegalArgumentException with negative parameters
 	 *
 	 *****************************************************************/
-	public ATM(int hundries, int fifties, int twenties) {
-
-		if (hundries < 0 || fifties < 0 || twenties < 0)
+	public ATM(int hundreds, int fifties, int twenties) {
+		if (hundreds < 0 || fifties < 0 || twenties < 0)
 			throw new IllegalArgumentException();
 
-		this.hundreds = hundries;
+		this.hundreds = hundreds;
 		this.fifties = fifties;
 		this.twenties = twenties;
 	}
 
 	/*********
 	 * A method that return true if this ATM is the same as
-	 * other object (ohter ATM)
+	 * other object
 	 * @param other
 	 * @return
 	 */
-	public boolean equals(ATM other){ // change Object to ATM
-		if(other == null)
+	public boolean equals(Object other) { // change Object to ATM
+		if (other != null) {
+			if (other instanceof ATM) {
+				ATM temp = (ATM) other;
+				if (this.twenties == temp.twenties && this.fifties == temp.fifties
+						&& this.hundreds == temp.hundreds)
+					return true;
+				 else
+					return false;
+
+			}
+			else
+				throw new IllegalArgumentException();
+		}
+		else
 			throw new IllegalArgumentException();
-		if (this.twenties == other.twenties && this.fifties == other.fifties
-		&& this.hundreds == other.hundreds){
-			return true;
-		}
-		else{
-			return false;
-		}
+
 	}
 
 	/******
@@ -197,7 +203,7 @@ public class ATM extends Object {
 	public void putIn(int hundreds, int fifties, int twenties) {
 		if (suspend)
 			return;
-		// what if the parameters are negative
+
 		if (hundreds < 0 || fifties < 0 || twenties < 0)
 			throw new IllegalArgumentException();
 
@@ -248,7 +254,8 @@ public class ATM extends Object {
 	public ATM takeOut(int totalAmount) {
 		if (suspend)
 			return null;
-		if (convertToDollars(this) < totalAmount)
+
+		if (convertToDollars(this) < totalAmount || totalAmount < 0 || (totalAmount % 10) != 0)
 			throw new IllegalArgumentException();
 
 		int hund, fif, twent;
@@ -257,7 +264,7 @@ public class ATM extends Object {
 		//fif = totalAmount / 50;
 		//twent = totalAmount / 20;
 
-		if ((this.hundreds > 0) && ( totalAmount >= 100)) {
+		if ((this.hundreds > 0) && (totalAmount >= 100)) {
 			if ((totalAmount % 100) == 30) {
 				hund--;
 				totalAmount = totalAmount - (hund * 100);
@@ -265,12 +272,16 @@ public class ATM extends Object {
 			} else {
 				totalAmount = totalAmount - (hund * 100);
 				this.hundreds = this.hundreds - hund;
+
 			}
+		}
+		else{
+			hund = 0;
 		}
 
 		fif = totalAmount / 50;
 
-		if( ((this.fifties > 0) && totalAmount >=50)) {
+		if (((this.fifties > 0) && totalAmount >= 50)) {
 			if (((totalAmount % 50) == 30) || ((totalAmount % 50) == 10)) {
 				fif--;
 				totalAmount = totalAmount - (fif * 50);
@@ -280,10 +291,13 @@ public class ATM extends Object {
 				this.fifties = this.fifties - fif;
 			}
 		}
+		else{
+			fif = 0;
+		}
 
 		twent = totalAmount / 20;
 
-		if((this.twenties > 0) && (totalAmount >= 20) ) {
+		if ((this.twenties > 0) && (totalAmount >= 20)) {
 			if ((totalAmount % 20) == 10) {
 				twent--;
 				totalAmount = totalAmount - (twent * 20);
@@ -293,99 +307,17 @@ public class ATM extends Object {
 				this.twenties = this.twenties - twent;
 			}
 		}
-
-		if(totalAmount != 0){
-			throw new IllegalArgumentException();
+		else {
+			twent = 0;
 		}
-		else{
-		ATM temp = new ATM(hund,fif,twent);
 
-		return temp;}
+		if (totalAmount != 0) {
+			throw new IllegalArgumentException();
+		} else {
+			ATM temp = new ATM(hund, fif, twent);
 
-
-
-
-
-//		int amountThisATM = (this.hundreds * 100) + (this.fifties * 50) + (this.twenties * 20);
-//
-//		if (totalAmount < 0 || (totalAmount % 10) != 0 || amountThisATM < totalAmount)
-//			throw new IllegalArgumentException();
-//
-//		ATM temp = new ATM();
-//		int hundred = 0, fifty = 0, twenty = 0, leftOver1 = 0, leftOver2 = 0, leftAmount = 0;
-//        // check for 100$ bill
-//		hundred = totalAmount / 100;
-//		if (this.hundreds < hundred) {   // if hundreds bill isn't enough
-//			//int diff100 = hundred - this.hundreds;
-//			temp.setHundreds(this.hundreds);
-//			leftOver1 = (totalAmount - this.hundreds * 100);
-//			this.setHundreds(0);
-//		} else { //this.hundreds >= hundred
-//			temp.setHundreds(hundred);
-//			leftOver1 = (totalAmount - hundred * 100);
-//			this.setHundreds(this.hundreds - hundred);
-//		}
-//
-//		//
-//		if (leftOver1 / 100 >= 1){ // if there still hundred needed but no more 100$ bill (ex: 120)
-//			fifty = leftOver1 / 50;
-//			if (this.fifties < fifty){ // if fifties bill isn't enough
-//				//int diff50 = fifty - this.fifties;
-//				temp.setFifties(this.fifties);
-//				leftOver2 = (leftOver1 - fifty * 50);
-//				this.setFifties(0);
-//			}
-//			else { // if fifties bill is enough or more
-//				leftOver2 = (leftOver1 - fifty * 50);
-//				temp.setFifties(fifty);
-//				this.setFifties(this.fifties - fifty);
-//			}
-//			twenty = leftOver2 / 20;
-//			temp.setTwenties(twenty);
-//			this.setTwenties(this.twenties - twenty);
-//
-//		}
-//
-//		else{ //(leftOver1 / 100 < 1) // if there is no hundred left and no 100$ bill left (ex: 50)
-//			if (leftOver1 >= 50) {
-//				if ((leftOver1 / 10) % 2 == 0) {
-//					fifty = 0;
-//					twenty = leftOver1 / 20;
-//					temp.setFifties(0);
-//					temp.setTwenties(twenty);
-//					this.setTwenties(this.twenties - twenty);
-//
-//
-//				} else { //if (leftOver1 / 10)%2 != 0
-//					fifty = leftOver1 / 50;
-//					if (this.fifties < fifty) { // if fifties bill isn't enough
-//						throw new IllegalArgumentException();
-//					}
-//					else {
-//						temp.setFifties(fifty);
-//						this.setFifties(this.fifties - fifty);
-//						twenty = (leftOver1 - fifty * 50) / 20;
-//						if (this.twenties < twenty) { // if twenty bill isn't enough
-//							throw new IllegalArgumentException();
-//						}
-//						temp.setTwenties(twenty);
-//						this.setTwenties(this.twenties - twenty);
-//					}
-//				}
-//			}
-//			if (leftOver1 < 50) {
-//				fifty = 0;
-//				temp.setFifties(0);
-//				twenty = leftOver1 / 20;
-//				if (this.twenties < twenty) { // if fifties bill isn't enough
-//					throw new IllegalArgumentException();
-//				}
-//				temp.setTwenties(twenty);
-//				this.setTwenties(this.twenties - twenty);
-//
-//			}
-//		}
-//		return temp;
+			return temp;
+		}
 	}
 
 	/*****
@@ -475,7 +407,7 @@ public class ATM extends Object {
 			throw new IllegalArgumentException();
 
 		int dollars = Integer.parseInt(amount);
-		if (dollars < 0)
+		if (dollars < 0)// || (dollars % 10)!= 0)
 			throw new IllegalArgumentException();
 
 		int hundreds = dollars / 100;
