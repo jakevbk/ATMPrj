@@ -1,4 +1,4 @@
-package F20Project1GIVETOSTUDENTS;
+package atmPack;
 /********************************************************
  *
  * Describe the class here
@@ -246,89 +246,146 @@ public class ATM extends Object {
 	 * @return temp
 	 */
 	public ATM takeOut(int totalAmount) {
-		if(suspend)
+		if (suspend)
 			return null;
-
-		int amountThisATM = (this.hundreds * 100) + (this.fifties * 50) + (this.twenties * 20);
-
-		if (totalAmount < 0 || (totalAmount % 10) != 0 || amountThisATM < totalAmount)
+		if (convertToDollars(this) < totalAmount)
 			throw new IllegalArgumentException();
 
-		ATM temp = new ATM();
-		int hundred = 0, fifty = 0, twenty = 0, leftOver1 = 0, leftOver2 = 0, leftAmount = 0;
-        // check for 100$ bill
-		hundred = totalAmount / 100;
-		if (this.hundreds < hundred) {   // if hundreds bill isn't enough
-			//int diff100 = hundred - this.hundreds;
-			temp.setHundreds(this.hundreds);
-			leftOver1 = (totalAmount - this.hundreds * 100);
-			this.setHundreds(0);
-		} else { //this.hundreds >= hundred
-			temp.setHundreds(hundred);
-			leftOver1 = (totalAmount - hundred * 100);
-			this.setHundreds(this.hundreds - hundred);
-		}
+		int hund, fif, twent;
 
-		//
-		if (leftOver1 / 100 >= 1){ // if there still hundred needed but no more 100$ bill (ex: 120)
-			fifty = leftOver1 / 50;
-			if (this.fifties < fifty){ // if fifties bill isn't enough
-				//int diff50 = fifty - this.fifties;
-				temp.setFifties(this.fifties);
-				leftOver2 = (leftOver1 - fifty * 50);
-				this.setFifties(0);
-			}
-			else { // if fifties bill is enough or more
-				leftOver2 = (leftOver1 - fifty * 50);
-				temp.setFifties(fifty);
-				this.setFifties(this.fifties - fifty);
-			}
-			twenty = leftOver2 / 20;
-			temp.setTwenties(twenty);
-			this.setTwenties(this.twenties - twenty);
+		hund = totalAmount / 100;
+		//fif = totalAmount / 50;
+		//twent = totalAmount / 20;
 
-		}
-
-		else{ //(leftOver1 / 100 < 1) // if there is no hundred left and no 100$ bill left (ex: 50)
-			if (leftOver1 >= 50) {
-				if ((leftOver1 / 10) % 2 == 0) {
-					fifty = 0;
-					twenty = leftOver1 / 20;
-					temp.setFifties(0);
-					temp.setTwenties(twenty);
-					this.setTwenties(this.twenties - twenty);
-
-
-				} else { //if (leftOver1 / 10)%2 != 0
-					fifty = leftOver1 / 50;
-					if (this.fifties < fifty) { // if fifties bill isn't enough
-						throw new IllegalArgumentException();
-					}
-					else {
-						temp.setFifties(fifty);
-						this.setFifties(this.fifties - fifty);
-						twenty = (leftOver1 - fifty * 50) / 20;
-						if (this.twenties < twenty) { // if twenty bill isn't enough
-							throw new IllegalArgumentException();
-						}
-						temp.setTwenties(twenty);
-						this.setTwenties(this.twenties - twenty);
-					}
-				}
-			}
-			if (leftOver1 < 50) {
-				fifty = 0;
-				temp.setFifties(0);
-				twenty = leftOver1 / 20;
-				if (this.twenties < twenty) { // if fifties bill isn't enough
-					throw new IllegalArgumentException();
-				}
-				temp.setTwenties(twenty);
-				this.setTwenties(this.twenties - twenty);
-
+		if ((this.hundreds > 0) && ( totalAmount >= 100)) {
+			if ((totalAmount % 100) == 30) {
+				hund--;
+				totalAmount = totalAmount - (hund * 100);
+				this.hundreds = this.hundreds - hund;
+			} else {
+				totalAmount = totalAmount - (hund * 100);
+				this.hundreds = this.hundreds - hund;
 			}
 		}
-		return temp;
+
+		fif = totalAmount / 50;
+
+		if( ((this.fifties > 0) && totalAmount >=50)) {
+			if (((totalAmount % 50) == 30) || ((totalAmount % 50) == 10)) {
+				fif--;
+				totalAmount = totalAmount - (fif * 50);
+				this.fifties = this.fifties - fif;
+			} else {
+				totalAmount = totalAmount - (fif * 50);
+				this.fifties = this.fifties - fif;
+			}
+		}
+
+		twent = totalAmount / 20;
+
+		if((this.twenties > 0) && (totalAmount >= 20) ) {
+			if ((totalAmount % 20) == 10) {
+				twent--;
+				totalAmount = totalAmount - (twent * 20);
+				this.twenties = this.twenties - twent;
+			} else {
+				totalAmount = totalAmount - (twent * 20);
+				this.twenties = this.twenties - twent;
+			}
+		}
+
+		if(totalAmount != 0){
+			throw new IllegalArgumentException();
+		}
+		else{
+		ATM temp = new ATM(hund,fif,twent);
+
+		return temp;}
+
+
+
+
+
+//		int amountThisATM = (this.hundreds * 100) + (this.fifties * 50) + (this.twenties * 20);
+//
+//		if (totalAmount < 0 || (totalAmount % 10) != 0 || amountThisATM < totalAmount)
+//			throw new IllegalArgumentException();
+//
+//		ATM temp = new ATM();
+//		int hundred = 0, fifty = 0, twenty = 0, leftOver1 = 0, leftOver2 = 0, leftAmount = 0;
+//        // check for 100$ bill
+//		hundred = totalAmount / 100;
+//		if (this.hundreds < hundred) {   // if hundreds bill isn't enough
+//			//int diff100 = hundred - this.hundreds;
+//			temp.setHundreds(this.hundreds);
+//			leftOver1 = (totalAmount - this.hundreds * 100);
+//			this.setHundreds(0);
+//		} else { //this.hundreds >= hundred
+//			temp.setHundreds(hundred);
+//			leftOver1 = (totalAmount - hundred * 100);
+//			this.setHundreds(this.hundreds - hundred);
+//		}
+//
+//		//
+//		if (leftOver1 / 100 >= 1){ // if there still hundred needed but no more 100$ bill (ex: 120)
+//			fifty = leftOver1 / 50;
+//			if (this.fifties < fifty){ // if fifties bill isn't enough
+//				//int diff50 = fifty - this.fifties;
+//				temp.setFifties(this.fifties);
+//				leftOver2 = (leftOver1 - fifty * 50);
+//				this.setFifties(0);
+//			}
+//			else { // if fifties bill is enough or more
+//				leftOver2 = (leftOver1 - fifty * 50);
+//				temp.setFifties(fifty);
+//				this.setFifties(this.fifties - fifty);
+//			}
+//			twenty = leftOver2 / 20;
+//			temp.setTwenties(twenty);
+//			this.setTwenties(this.twenties - twenty);
+//
+//		}
+//
+//		else{ //(leftOver1 / 100 < 1) // if there is no hundred left and no 100$ bill left (ex: 50)
+//			if (leftOver1 >= 50) {
+//				if ((leftOver1 / 10) % 2 == 0) {
+//					fifty = 0;
+//					twenty = leftOver1 / 20;
+//					temp.setFifties(0);
+//					temp.setTwenties(twenty);
+//					this.setTwenties(this.twenties - twenty);
+//
+//
+//				} else { //if (leftOver1 / 10)%2 != 0
+//					fifty = leftOver1 / 50;
+//					if (this.fifties < fifty) { // if fifties bill isn't enough
+//						throw new IllegalArgumentException();
+//					}
+//					else {
+//						temp.setFifties(fifty);
+//						this.setFifties(this.fifties - fifty);
+//						twenty = (leftOver1 - fifty * 50) / 20;
+//						if (this.twenties < twenty) { // if twenty bill isn't enough
+//							throw new IllegalArgumentException();
+//						}
+//						temp.setTwenties(twenty);
+//						this.setTwenties(this.twenties - twenty);
+//					}
+//				}
+//			}
+//			if (leftOver1 < 50) {
+//				fifty = 0;
+//				temp.setFifties(0);
+//				twenty = leftOver1 / 20;
+//				if (this.twenties < twenty) { // if fifties bill isn't enough
+//					throw new IllegalArgumentException();
+//				}
+//				temp.setTwenties(twenty);
+//				this.setTwenties(this.twenties - twenty);
+//
+//			}
+//		}
+//		return temp;
 	}
 
 	/*****
