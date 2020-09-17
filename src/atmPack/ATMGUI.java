@@ -21,7 +21,7 @@ public class ATMGUI {
 
         JFrame gui = new JFrame();
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gui.setTitle("My 3 ATM");
+        gui.setTitle("My 3 ATMs");
         gui.setSize(600,400);
         JPanel panel = new JPanel();
         panel.add(new ATMPanelMain(quitItem, suspendItem));

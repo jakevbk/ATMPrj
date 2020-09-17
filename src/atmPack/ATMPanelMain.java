@@ -14,6 +14,14 @@ public class ATMPanelMain extends JPanel {
         panel.add(new ATMPanel());
         add(panel);
 
+        JPanel panel2 = new JPanel();
+        panel.add(new ATMPanel());
+        add(panel);
+
+        JPanel panel3 = new JPanel();
+        panel.add(new ATMPanel());
+        add(panel);
+
         this.quitItem = quitItem;
         this.suspendItem = suspendItem;
 

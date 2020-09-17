@@ -18,7 +18,7 @@ public class ATMPanel extends JPanel{
 
 	NumberFormat fmt = NumberFormat.getCurrencyInstance();
 
-	JButton takeOutHFTButton;
+	JButton withdrawBillsButton, withDrawTotalButton, depositBillsButton, saveButton, loadButton;
 
 	JTextField hundredField, fiftyField, twentyField;
 
@@ -33,21 +33,39 @@ public class ATMPanel extends JPanel{
 		setBackground(Color.lightGray);
 
 		// get Die #2 from game and place on ATMGUI
+		add(new JLabel("Hundreds:"));
 		hundredField = new JTextField("0", 3);
 		add(hundredField);
-		add(new JLabel("Hundreds:"));
 
+		add(new JLabel("Fifties:"));
 		fiftyField = new JTextField("0", 3);
 		add(fiftyField);
-		add(new JLabel("Fifties:"));
 
+		add(new JLabel("Twenties:"));
 		twentyField = new JTextField("0", 3);
 		add(twentyField);
-		add(new JLabel("Twenties:"));
 
-		takeOutHFTButton = new JButton("Take Out with H,F,T");
-		add(takeOutHFTButton);
 
+		//I think this was a previous version so I created new JButtons
+//		takeOutHFTButton = new JButton("Take Out with H,F,T");
+//		add(takeOutHFTButton);
+
+		withdrawBillsButton = new JButton("Withdraw Bills");
+		add(withdrawBillsButton);
+
+		withDrawTotalButton = new JButton("Withdraw Total");
+		add(withDrawTotalButton);
+
+		depositBillsButton = new JButton("Deposit Bills");
+		depositBillsButton.setBounds(0,0,2,3);
+		add(depositBillsButton);
+
+
+		saveButton = new JButton("Save ATM");
+		add(saveButton);
+
+		loadButton = new JButton("Load ATM");
+		add(loadButton);
 
 		add(new JLabel("Total:"));
 
@@ -61,7 +79,13 @@ public class ATMPanel extends JPanel{
 
 		// register the listeners
 
-		takeOutHFTButton.addActionListener(new ButtonListener());
+		//takeOutHFTButton.addActionListener(new ButtonListener());
+		withdrawBillsButton.addActionListener(new ButtonListener());
+		withDrawTotalButton.addActionListener(new ButtonListener());
+		depositBillsButton.addActionListener(new ButtonListener());
+		saveButton.addActionListener(new ButtonListener());
+		loadButton.addActionListener(new ButtonListener());
+
 
 	}
 
@@ -73,14 +97,14 @@ Inner class to repond to the user action
 
 		public void actionPerformed(ActionEvent event) {
 
-			int hundreds, fifites, twenties;
+			int hundreds, fifties, twenties;
 
-			if (event.getSource() == takeOutHFTButton) {
+			if (event.getSource() == withdrawBillsButton) {
 				try {
 					hundreds = Integer.parseInt(hundredField.getText());
-					fifites = Integer.parseInt(fiftyField.getText());
+					fifties = Integer.parseInt(fiftyField.getText());
 					twenties = Integer.parseInt(twentyField.getText());
-					jar.takeOut(hundreds, fifites, twenties);
+					jar.takeOut(hundreds, fifties, twenties);
 				} catch (NumberFormatException io) {
 					JOptionPane.showMessageDialog(null, "Enter an integer in all fields");
 				} catch (IllegalArgumentException e) {
