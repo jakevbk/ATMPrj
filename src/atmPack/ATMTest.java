@@ -373,8 +373,8 @@ public class ATMTest {
 							ATM a2 = new ATM(h, f, t);
 							ATM b2 = myTakeOut(m, h, f, t);
 
-							//assertEquals (a1,a2);
-							assertEquals(b1,b2);
+							//ATM.equals(a1,a2);
+							ATM.equals(b1,b2);
 						}
 						catch (IllegalArgumentException e) {
 							numOfIll++;

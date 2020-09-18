@@ -12,9 +12,9 @@ import java.text.NumberFormat;
  * @author Roger Ferguson
  * @version April 7, 2019
  */
-public class ATMPanel extends JPanel{
-	
-	private ATM jar;
+public class ATMPanel extends JPanel {
+
+	private ATM jar, jar2, jar3;
 
 	NumberFormat fmt = NumberFormat.getCurrencyInstance();
 
@@ -23,17 +23,24 @@ public class ATMPanel extends JPanel{
 	JTextField hundredField, fiftyField, twentyField;
 
 
-	public ATMPanel(){ 
+	public ATMPanel() {
 
 		// create the game object as well as the ATMGUI Frame
 		jar = new ATM();
 
 		// set the layout to GridBag
-		setLayout(new GridLayout(13,2));
+		setLayout(new GridLayout(13, 2));
+		GridBagConstraints loc = new GridBagConstraints();
 		setBackground(Color.lightGray);
 
 		// get Die #2 from game and place on ATMGUI
-		add(new JLabel("Hundreds:"));
+		loc = new GridBagConstraints();
+		loc.gridwidth = 2;
+		loc.gridx = 0;
+		loc.gridy = 3;
+		loc.insets.bottom = 0;
+		loc.insets.top = 0;
+		add(new JLabel("Hundreds:"),loc);
 		hundredField = new JTextField("0", 3);
 		add(hundredField);
 
@@ -57,8 +64,14 @@ public class ATMPanel extends JPanel{
 		add(withDrawTotalButton);
 
 		depositBillsButton = new JButton("Deposit Bills");
-		depositBillsButton.setBounds(0,0,2,3);
-		add(depositBillsButton);
+		loc = new GridBagConstraints();
+		loc.anchor = GridBagConstraints.CENTER;
+		loc.gridwidth = 2;
+		loc.gridx = 0;
+		loc.gridy = 3;
+		loc.insets.bottom = 0;
+		loc.insets.top = 0;
+		add(depositBillsButton, loc);
 
 
 		saveButton = new JButton("Save ATM");
@@ -69,13 +82,13 @@ public class ATMPanel extends JPanel{
 
 		add(new JLabel("Total:"));
 
-		add (new JLabel(""));
+		add(new JLabel(""));
 
-		add (new JLabel ("Current State ATM"));
-		add (new JLabel(""));
-		add (new JLabel("Hundreds"));
-		add (new JLabel("Fifties"));
-		add (new JLabel("Twenties"));
+		add(new JLabel("Current State ATM"));
+		add(new JLabel(""));
+		add(new JLabel("Hundreds"));
+		add(new JLabel("Fifties"));
+		add(new JLabel("Twenties"));
 
 		// register the listeners
 
@@ -91,9 +104,9 @@ public class ATMPanel extends JPanel{
 
 
 	/****************************************************************
-Inner class to repond to the user action
-     ****************************************************************/
-	private class ButtonListener implements ActionListener{
+	 Inner class to repond to the user action
+	 ****************************************************************/
+	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
 
@@ -111,6 +124,20 @@ Inner class to repond to the user action
 					JOptionPane.showMessageDialog(null, "Not enough specified coins for this operation");
 				}
 			}
+
+			if (event.getSource() == depositBillsButton) {
+				try {
+					hundreds = Integer.parseInt(hundredField.getText());
+					fifties = Integer.parseInt(fiftyField.getText());
+					twenties = Integer.parseInt(twentyField.getText());
+					jar.putIn(hundreds, fifties, twenties);
+				} catch (NumberFormatException io) {
+					JOptionPane.showMessageDialog(null, "Enter an integer in all fields");
+				} catch (IllegalArgumentException e) {
+					JOptionPane.showMessageDialog(null, "Not enough specified coins for this operation");
+				}
+			}
 		}
 	}
 }
+

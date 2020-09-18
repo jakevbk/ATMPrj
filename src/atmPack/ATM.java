@@ -269,7 +269,7 @@ public class ATM extends Object {
 		//twent = totalAmount / 20;
 
 		if ((this.hundreds > 0) && (totalAmount >= 100)) {
-			if ((totalAmount % 100) == 30) {
+			if ((totalAmount % 100) == 30 || (totalAmount % 100 == 10))  {
 				hund--;
 				totalAmount = totalAmount - (hund * 100);
 				this.hundreds = this.hundreds - hund;
