@@ -1,4 +1,4 @@
-package atmPack;
+package F20Project1GIVETOSTUDENTS;
 /********************************************************
  *
  * Describe the class here
@@ -116,7 +116,7 @@ public class ATM extends Object {
 				if (this.twenties == temp.twenties && this.fifties == temp.fifties
 						&& this.hundreds == temp.hundreds)
 					return true;
-				else
+				 else
 					return false;
 
 			}
@@ -183,7 +183,6 @@ public class ATM extends Object {
 	/*******
 	 * A method that adds ATM other to the this ATM object
 	 * @param other
-	 * If we add to this ATM, shouldn't ATM other become empty?
 	 */
 	public void putIn(ATM other) {
 		if(suspend)
@@ -191,11 +190,8 @@ public class ATM extends Object {
 		if(other == null)
 			throw new IllegalArgumentException();
 		this.hundreds += other.hundreds;
-		//other.hundreds = 0;
 		this.fifties += other.fifties;
-		//other.fifties = 0;
 		this.twenties += other.twenties;
-		//other.twenties = 0;
 	}
 
 	/*******
@@ -229,6 +225,9 @@ public class ATM extends Object {
 		if (hundreds < 0 || fifties < 0 || twenties < 0)
 			throw new IllegalArgumentException();
 
+		if (this.hundreds < hundreds || this.fifties < fifties || this.twenties < twenties)
+			throw new IllegalArgumentException();
+
 		this.hundreds -= hundreds;
 		this.fifties -= fifties;
 		this.twenties -= twenties;
@@ -242,6 +241,9 @@ public class ATM extends Object {
 		if (suspend)
 			return;
 		if (other == null)
+			throw new IllegalArgumentException();
+		if (this.hundreds < other.hundreds || this.fifties < other.fifties
+				|| this.twenties < other.twenties)
 			throw new IllegalArgumentException();
 
 		this.hundreds -= other.hundreds;
@@ -262,57 +264,57 @@ public class ATM extends Object {
 		if (convertToDollars(this) < totalAmount || totalAmount < 0 || (totalAmount % 10) != 0)
 			throw new IllegalArgumentException();
 
-		int hund, fif, twent;
+		int hund =0 , fif = 0, twent = 0;
 
-		hund = totalAmount / 100;
-		//fif = totalAmount / 50;
-		//twent = totalAmount / 20;
+//		 hund = totalAmount / 100;
+//		fif = totalAmount / 50;
+//		twent = totalAmount / 20;
 
-		if ((this.hundreds > 0) && (totalAmount >= 100)) {
-			if ((totalAmount % 100) == 30 || (totalAmount % 100 == 10))  {
-				hund--;
-				totalAmount = totalAmount - (hund * 100);
-				this.hundreds = this.hundreds - hund;
-			} else {
-				totalAmount = totalAmount - (hund * 100);
-				this.hundreds = this.hundreds - hund;
+			for (hund = this.hundreds; hund >= 0; hund--) {
+				if ((totalAmount - hund * 100) >= 0) {
 
+//					if ((totalAmount - hund * 100) % 100 == 0 || (totalAmount - hund * 100) % 50 == 0
+//							|| (totalAmount - hund * 100) % 20 == 0) {
+					if (((totalAmount % 100) == 30 || (totalAmount % 100 == 10)) && (totalAmount <= 200)){
+						hund--;
+						totalAmount = totalAmount - hund * 100;
+						this.hundreds = this.hundreds - hund;
+						break;
+					}
+					else{
+						totalAmount = totalAmount - hund * 100;
+						this.hundreds = this.hundreds - hund;
+						break;
+					}
+//					if (hund == 0) {
+//						break;
+//					}
+				}
 			}
-		}
-		else{
-			hund = 0;
-		}
 
-		fif = totalAmount / 50;
 
-		if (((this.fifties > 0) && totalAmount >= 50)) {
-			if (((totalAmount % 50) == 30) || ((totalAmount % 50) == 10)) {
-				fif--;
-				totalAmount = totalAmount - (fif * 50);
-				this.fifties = this.fifties - fif;
-			} else {
-				totalAmount = totalAmount - (fif * 50);
-				this.fifties = this.fifties - fif;
+			for (fif = this.fifties; fif >= 0; fif--) {
+				if ((totalAmount - fif * 50) >= 0) {
+
+					if ((totalAmount - fif * 50) % 50 == 0 || (totalAmount - fif * 50) % 20 == 0) {
+
+						totalAmount = totalAmount - fif * 50;
+						this.fifties = this.fifties - fif;
+						break;
+					}
+					if (fif == 0) {
+						break;
+					}
+				}
 			}
-		}
-		else{
-			fif = 0;
-		}
 
-		twent = totalAmount / 20;
 
-		if ((this.twenties > 0) && (totalAmount >= 20)) {
-			if ((totalAmount % 20) == 10) {
-				twent--;
-				totalAmount = totalAmount - (twent * 20);
+		for (twent = this.twenties; twent >= 0; twent--) {
+			if((totalAmount - twent * 20) >= 0){
+				totalAmount = totalAmount - twent * 20;
 				this.twenties = this.twenties - twent;
-			} else {
-				totalAmount = totalAmount - (twent * 20);
-				this.twenties = this.twenties - twent;
+				break;
 			}
-		}
-		else {
-			twent = 0;
 		}
 
 		if (totalAmount != 0) {
@@ -437,3 +439,6 @@ public class ATM extends Object {
 	}
 
 }
+	
+
+	
