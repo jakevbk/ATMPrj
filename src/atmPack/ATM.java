@@ -262,66 +262,99 @@ public class ATM extends Object {
 		if (convertToDollars(this) < totalAmount || totalAmount < 0 || (totalAmount % 10) != 0)
 			throw new IllegalArgumentException();
 
-		int hund, fif, twent;
+		int hund = 0, fif = 0, twent = 0;
 
-		hund = totalAmount / 100;
-		//fif = totalAmount / 50;
-		//twent = totalAmount / 20;
-
-		if ((this.hundreds > 0) && (totalAmount >= 100)) {
-			if ((totalAmount % 100) == 30 || (totalAmount % 100 == 10))  {
-				hund--;
-				totalAmount = totalAmount - (hund * 100);
-				this.hundreds = this.hundreds - hund;
-			} else {
-				totalAmount = totalAmount - (hund * 100);
-				this.hundreds = this.hundreds - hund;
-
-			}
+		while(hund < this.hundreds && (totalAmount ==100 || totalAmount >= 120)){
+			totalAmount = totalAmount - 100;
+			hund++;
 		}
-		else{
-			hund = 0;
+		if(totalAmount == 30 || totalAmount == 10){
+			totalAmount = totalAmount + 100;
+			hund--;
 		}
-
-		fif = totalAmount / 50;
-
-		if (((this.fifties > 0) && totalAmount >= 50)) {
-			if (((totalAmount % 50) == 30) || ((totalAmount % 50) == 10)) {
-				fif--;
-				totalAmount = totalAmount - (fif * 50);
-				this.fifties = this.fifties - fif;
-			} else {
-				totalAmount = totalAmount - (fif * 50);
-				this.fifties = this.fifties - fif;
-			}
+		while(fif < this.fifties && (totalAmount == 50|| totalAmount >= 70 )){
+			totalAmount = totalAmount - 50;
+			fif++;
 		}
-		else{
-			fif = 0;
+		if(totalAmount == 30 || totalAmount == 10){
+			totalAmount = totalAmount + 50;
+			fif--;
+		}
+		while(twent < this.twenties && totalAmount >=20){
+			totalAmount = totalAmount - 20;
+			twent++;
 		}
 
-		twent = totalAmount / 20;
+		this.hundreds = this.hundreds - hund;
+		this.fifties = this.fifties - fif;
+		this.twenties = this.twenties - twent;
 
-		if ((this.twenties > 0) && (totalAmount >= 20)) {
-			if ((totalAmount % 20) == 10) {
-				twent--;
-				totalAmount = totalAmount - (twent * 20);
-				this.twenties = this.twenties - twent;
-			} else {
-				totalAmount = totalAmount - (twent * 20);
-				this.twenties = this.twenties - twent;
-			}
-		}
-		else {
-			twent = 0;
-		}
-
-		if (totalAmount != 0) {
+		if(totalAmount != 0){
 			throw new IllegalArgumentException();
-		} else {
-			ATM temp = new ATM(hund, fif, twent);
-
+		}
+		else{
+			ATM temp = new ATM(hund,fif,twent);
 			return temp;
 		}
+//
+//		hund = totalAmount / 100;
+//		//fif = totalAmount / 50;
+//		//twent = totalAmount / 20;
+//
+//		if ((this.hundreds > 0) && (totalAmount >= 100)) {
+//			if ((totalAmount % 100) == 30 || (totalAmount % 100 == 10))  {
+//				hund--;
+//				totalAmount = totalAmount - (hund * 100);
+//				this.hundreds = this.hundreds - hund;
+//			} else {
+//				totalAmount = totalAmount - (hund * 100);
+//				this.hundreds = this.hundreds - hund;
+//
+//			}
+//		}
+//		else{
+//			hund = 0;
+//		}
+//
+//		fif = totalAmount / 50;
+//
+//		if (((this.fifties > 0) && totalAmount >= 50)) {
+//			if (((totalAmount % 50) == 30) || ((totalAmount % 50) == 10)) {
+//				fif--;
+//				totalAmount = totalAmount - (fif * 50);
+//				this.fifties = this.fifties - fif;
+//			} else {
+//				totalAmount = totalAmount - (fif * 50);
+//				this.fifties = this.fifties - fif;
+//			}
+//		}
+//		else{
+//			fif = 0;
+//		}
+//
+//		twent = totalAmount / 20;
+//
+//		if ((this.twenties > 0) && (totalAmount >= 20)) {
+//			if ((totalAmount % 20) == 10) {
+//				twent--;
+//				totalAmount = totalAmount - (twent * 20);
+//				this.twenties = this.twenties - twent;
+//			} else {
+//				totalAmount = totalAmount - (twent * 20);
+//				this.twenties = this.twenties - twent;
+//			}
+//		}
+//		else {
+//			twent = 0;
+//		}
+//
+//		if (totalAmount != 0) {
+//			throw new IllegalArgumentException();
+//		} else {
+//			ATM temp = new ATM(hund, fif, twent);
+//
+//			return temp;
+//		}
 	}
 
 	/*****
