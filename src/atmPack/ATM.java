@@ -9,6 +9,7 @@ package atmPack;
  ********************************************************/
 
 import java.io.*;
+import java.nio.file.NoSuchFileException;
 import java.util.Scanner;
 
 public class ATM extends Object {
@@ -225,13 +226,16 @@ public class ATM extends Object {
 	public void takeOut(int hundreds, int fifties, int twenties) {
 		if (suspend)
 			return;
-		// what if the parameters are negative
+		// making sure parameters aren't negative
 		if (hundreds < 0 || fifties < 0 || twenties < 0)
 			throw new IllegalArgumentException();
-
-		this.hundreds -= hundreds;
-		this.fifties -= fifties;
-		this.twenties -= twenties;
+		//making sure there are sufficent bills
+		if(this.hundreds - hundreds < 0 || this.fifties - fifties < 0 || this.twenties - twenties < 0)
+			throw new IllegalArgumentException();
+		else
+			this.hundreds -= hundreds;
+			this.fifties -= fifties;
+			this.twenties -= twenties;
 	}
 
 	/*****
@@ -259,7 +263,7 @@ public class ATM extends Object {
 		if (suspend)
 			return null;
 
-		if (convertToDollars(this) < totalAmount || totalAmount < 0 || (totalAmount % 10) != 0)
+		if (convertToDollars(this) < totalAmount ||totalAmount < 0 || (totalAmount == 10) || (totalAmount == 30) || (totalAmount % 10) != 0)
 			throw new IllegalArgumentException();
 
 		int hund = 0, fif = 0, twent = 0;
@@ -280,21 +284,21 @@ public class ATM extends Object {
 			totalAmount = totalAmount + 50;
 			fif--;
 		}
-		while(twent < this.twenties && totalAmount >=20){
+		while(twent < this.twenties && totalAmount >=20 && (totalAmount % 20 == 0)){
 			totalAmount = totalAmount - 20;
 			twent++;
 		}
 
-		this.hundreds = this.hundreds - hund;
-		this.fifties = this.fifties - fif;
-		this.twenties = this.twenties - twent;
+		if(totalAmount == 0){
+			this.hundreds = this.hundreds - hund;
+			this.fifties = this.fifties - fif;
+			this.twenties = this.twenties - twent;
 
-		if(totalAmount != 0){
-			throw new IllegalArgumentException();
-		}
-		else{
 			ATM temp = new ATM(hund,fif,twent);
 			return temp;
+		}
+		else{
+			throw new IllegalArgumentException();
 		}
 //
 //		hund = totalAmount / 100;

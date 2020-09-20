@@ -327,6 +327,7 @@ public class ATMTest {
 	}
 
 	public ATM myTakeOut(int totalAmount, int hundreds, int fifties, int twenties) {
+
 		if (totalAmount <= (hundreds * 100 + fifties * 50 + twenties * 20)) {
 			for (int a = hundreds; a >= 0; a--) {
 				for (int b = fifties; b >= 0; b--) {
@@ -469,7 +470,7 @@ public class ATMTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testPutInNeghundereds() {
+	public void testPutInNegHundereds() {
 		ATM s = new ATM(2, 3, 4);
 		s.putIn(-30, 2, 30);
 	}

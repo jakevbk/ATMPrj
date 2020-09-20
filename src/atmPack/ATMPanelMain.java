@@ -17,11 +17,11 @@ public class ATMPanelMain extends JPanel {
 
         JPanel panel2 = new JPanel();
         panel.add(new ATMPanel());
-        add(panel);
+        add(panel2);
 
         JPanel panel3 = new JPanel();
         panel.add(new ATMPanel());
-        add(panel);
+        add(panel3);
 
         this.quitItem = quitItem;
         this.suspendItem = suspendItem;
@@ -35,7 +35,11 @@ public class ATMPanelMain extends JPanel {
             if (e.getSource() == quitItem) {
                 System.exit(1);
             }
+            if (e.getSource() == suspendItem) {
+                ATM.suspend(true);
+            }
         }
+
     }
 }
 
