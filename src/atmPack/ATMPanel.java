@@ -19,7 +19,6 @@ public class ATMPanel extends JPanel {
 	NumberFormat fmt = NumberFormat.getCurrencyInstance();
 
 	JButton withdrawBillsButton, withDrawTotalButton, depositBillsButton, saveButton, loadButton;
-	JCheckBoxMenuItem suspend;
 
 	JTextField twentsIN, fiftsIN, hundsIN, totalIN, hundredField, fiftyField, twentyField, totalField;
 
@@ -72,15 +71,7 @@ public class ATMPanel extends JPanel {
 		add(withDrawTotalButton);
 
 		depositBillsButton = new JButton("Deposit Bills");
-		loc = new GridBagConstraints();
-		loc.anchor = GridBagConstraints.CENTER;
-		loc.gridwidth = 2;
-		loc.gridx = 0;
-		loc.gridy = 3;
-		loc.insets.bottom = 0;
-		loc.insets.top = 0;
-		add(depositBillsButton, loc);
-
+		add(depositBillsButton);
 
 		saveButton = new JButton("Save ATM");
 		add(saveButton);
@@ -147,7 +138,6 @@ public class ATMPanel extends JPanel {
 					hundreds = Integer.parseInt(hundredField.getText());
 					fifties = Integer.parseInt(fiftyField.getText());
 					twenties = Integer.parseInt(twentyField.getText());
-					System.out.println(hundreds);
 					jar.takeOut(hundreds, fifties, twenties);
 					hundsIN.setText("" + jar.getHundreds());
 					fiftsIN.setText("" + jar.getFifties());
@@ -157,6 +147,20 @@ public class ATMPanel extends JPanel {
 					JOptionPane.showMessageDialog(null, "Enter an integer in all fields");
 				} catch (IllegalArgumentException e) {
 					JOptionPane.showMessageDialog(null, "Not enough specified coins for this operation");
+				}
+			}
+			if(event.getSource() == withDrawTotalButton){
+				try{
+					int totalAmount = Integer.parseInt(totalField.getText());
+					jar.takeOut(totalAmount);
+					hundsIN.setText("" + jar.getHundreds());
+					fiftsIN.setText("" + jar.getFifties());
+					twentsIN.setText("" + jar.getTwenties());
+					totalIN.setText("" + fmt.format(convertToTotal(jar)));
+				}catch (NumberFormatException io){
+					JOptionPane.showMessageDialog(null, "Enter an Integer");
+				}catch(IllegalArgumentException e){
+					JOptionPane.showMessageDialog(null, "Insufficient funds or not correct bills");
 				}
 			}
 
@@ -173,6 +177,12 @@ public class ATMPanel extends JPanel {
 				} catch (NumberFormatException io) {
 					JOptionPane.showMessageDialog(null, "Enter an integer in all fields");
 				}
+			}
+			if(event.getSource() == saveButton){
+				jar.save("ATM");
+			}
+			if(event.getSource() == loadButton){
+				jar.load("ATM");
 			}
 		}
 	}

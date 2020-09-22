@@ -115,8 +115,8 @@ public class ATMTest {
 		assertEquals(5, s1.getFifties());
 		assertEquals(3, s1.getTwenties());
 	}
-
-	//We need to edit takeOut(ATM other) to throw errors if any value of other is greater than this atm
+//
+//	//We need to edit takeOut(ATM other) to throw errors if any value of other is greater than this atm
 //	@Test (expected = IllegalArgumentException.class)
 //	public void takeOutFromAnotherNegative(){
 //		ATM s1 = new ATM(4,7,3);
@@ -230,8 +230,8 @@ public class ATMTest {
 		s1 = new ATM();  // resets to zero
 
 		s1.load("file1");
-		//System.out.println(s1);
-		//System.out.println(s2);
+		System.out.println(s1);
+		System.out.println(s2);
 		assertTrue(s1.equals(s2));
 
 	}
@@ -337,6 +337,7 @@ public class ATMTest {
 							fifties -= b;
 							twenties -= c;
 							return new ATM(a, b, c);
+
 						}
 					}
 				}
@@ -375,7 +376,7 @@ public class ATMTest {
 							ATM b2 = myTakeOut(m, h, f, t);
 
 							//ATM.equals(a1,a2);
-							ATM.equals(b1,b2);
+							assertEquals(b1,b2);
 						}
 						catch (IllegalArgumentException e) {
 							numOfIll++;

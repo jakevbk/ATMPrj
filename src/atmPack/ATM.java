@@ -29,16 +29,10 @@ public class ATM extends Object {
 	 */
 	private int twenties;
 
-	/**
-	 * the number of left over amount after take out from this ATM
-	 */
-	// private int leftOver;
-
 	private static boolean suspend = false;
 
 	public ATM() {
 	}
-
 
 	public int getTwenties() {
 		return twenties;
@@ -192,11 +186,8 @@ public class ATM extends Object {
 		if(other == null)
 			throw new IllegalArgumentException();
 		this.hundreds += other.hundreds;
-		//other.hundreds = 0;
 		this.fifties += other.fifties;
-		//other.fifties = 0;
 		this.twenties += other.twenties;
-		//other.twenties = 0;
 	}
 
 	/*******
@@ -300,65 +291,6 @@ public class ATM extends Object {
 		else{
 			throw new IllegalArgumentException();
 		}
-//
-//		hund = totalAmount / 100;
-//		//fif = totalAmount / 50;
-//		//twent = totalAmount / 20;
-//
-//		if ((this.hundreds > 0) && (totalAmount >= 100)) {
-//			if ((totalAmount % 100) == 30 || (totalAmount % 100 == 10))  {
-//				hund--;
-//				totalAmount = totalAmount - (hund * 100);
-//				this.hundreds = this.hundreds - hund;
-//			} else {
-//				totalAmount = totalAmount - (hund * 100);
-//				this.hundreds = this.hundreds - hund;
-//
-//			}
-//		}
-//		else{
-//			hund = 0;
-//		}
-//
-//		fif = totalAmount / 50;
-//
-//		if (((this.fifties > 0) && totalAmount >= 50)) {
-//			if (((totalAmount % 50) == 30) || ((totalAmount % 50) == 10)) {
-//				fif--;
-//				totalAmount = totalAmount - (fif * 50);
-//				this.fifties = this.fifties - fif;
-//			} else {
-//				totalAmount = totalAmount - (fif * 50);
-//				this.fifties = this.fifties - fif;
-//			}
-//		}
-//		else{
-//			fif = 0;
-//		}
-//
-//		twent = totalAmount / 20;
-//
-//		if ((this.twenties > 0) && (totalAmount >= 20)) {
-//			if ((totalAmount % 20) == 10) {
-//				twent--;
-//				totalAmount = totalAmount - (twent * 20);
-//				this.twenties = this.twenties - twent;
-//			} else {
-//				totalAmount = totalAmount - (twent * 20);
-//				this.twenties = this.twenties - twent;
-//			}
-//		}
-//		else {
-//			twent = 0;
-//		}
-//
-//		if (totalAmount != 0) {
-//			throw new IllegalArgumentException();
-//		} else {
-//			ATM temp = new ATM(hund, fif, twent);
-//
-//			return temp;
-//		}
 	}
 
 	/*****
@@ -425,12 +357,16 @@ public class ATM extends Object {
 	 * @param on
 	 */
 	public static void suspend (Boolean on){
-     if(on == true){
-     	suspend = true;
-	 }
-     else{
-     	suspend = false;
-	 }
+		if(on == true){
+			suspend = true;
+		}
+		else{
+			suspend = false;
+		}
+	}
+
+	public static boolean isSuspend() {
+		return suspend;
 	}
 
 

@@ -16,8 +16,8 @@ public class ATMGUI {
         suspendItem = new JCheckBoxMenuItem ("Suspend");
         fileMenu.add(suspendItem);
         fileMenu.add(quitItem);
-
         menus = new JMenuBar();
+
         menus.add(fileMenu);
 
         JFrame gui = new JFrame();

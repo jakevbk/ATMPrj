@@ -11,6 +11,9 @@ public class ATMPanelMain extends JPanel {
     private JMenuItem suspendItem;
 
     public ATMPanelMain(JMenuItem quitItem, JMenuItem suspendItem) {
+        suspendItem = new JCheckBoxMenuItem("Suspend All ATMs");
+        add(suspendItem);
+
         JPanel panel = new JPanel();
         panel.add(new ATMPanel());
         add(panel);
@@ -36,12 +39,18 @@ public class ATMPanelMain extends JPanel {
                 System.exit(1);
             }
             if (e.getSource() == suspendItem) {
-                ATM.suspend(true);
+                if(ATM.isSuspend() == true){
+                    ATM.suspend(false);
+                }
+                else {
+                    ATM.suspend(true);
+                }
+                }
+
             }
         }
 
     }
-}
 
 
 
