@@ -9,6 +9,7 @@ package atmPack;
  ********************************************************/
 
 import java.io.*;
+// import java.nio.file.NoSuchFileException;
 import java.util.Scanner;
 
 public class ATM extends Object {
@@ -459,6 +460,15 @@ public class ATM extends Object {
         } else {
             suspend = false;
         }
+    }
+    
+     /**
+     * A getter method for suspend variable (true or false).
+     *
+     * @return suspend an instance variable that returns true or false
+     */
+    public static boolean isSuspend() {
+        return suspend;
     }
 
     /**
