@@ -1,9 +1,10 @@
 package atmPack;
 /********************************************************
  * Project 1
- * @author Thanh Tran, Jacob VanBronkhorst
+ * @author Thanh Tran & Jacob VanBronkhorst
  *
- * An project that programming for the ATM. The project needs to create
+ * A project for programming a simple ATM system.
+ * The project needs to create
  * and implement methods and properties in ATM class.
  *
  ********************************************************/
@@ -56,6 +57,9 @@ public class ATM extends Object {
      * @throws IllegalArgumentException with negative parameter
      */
     public void setTwenties(int twenties) {
+        if (suspend)
+            return;
+
         if (twenties < 0)
             throw new IllegalArgumentException();
         this.twenties = twenties;
@@ -77,6 +81,9 @@ public class ATM extends Object {
      * @throws IllegalArgumentException with negative parameter
      */
     public void setFifties(int fifties) {
+        if (suspend)
+            return;
+
         if (fifties < 0)
             throw new IllegalArgumentException();
         this.fifties = fifties;
@@ -92,12 +99,15 @@ public class ATM extends Object {
     }
 
     /**
-     * The setter method to set the number of hundreds to the parameter
+     * The setter method to set number of hundreds to the parameter
      *
-     * @param hundreds the number of hundreds will be set to the ATM
+     * @param hundreds the number of hundreds will be set to ATM
      * @throws IllegalArgumentException with negative parameter
      */
     public void setHundreds(int hundreds) {
+        if (suspend)
+            return;
+
         if (hundreds < 0)
             throw new IllegalArgumentException();
         this.hundreds = hundreds;
@@ -142,7 +152,7 @@ public class ATM extends Object {
     }
 
     /*********
-     * A method that return true if this ATM is the same as
+     * A method that returns true if this ATM is the same as
      * other object.
      *
      * @param other an object type Object
@@ -156,8 +166,9 @@ public class ATM extends Object {
         if (other != null) {
             if (other instanceof ATM) {
                 ATM temp = (ATM) other;
-                if (this.twenties == temp.twenties && this.fifties == temp.fifties
-                        && this.hundreds == temp.hundreds)
+                if (this.twenties == temp.twenties &&
+                        this.fifties == temp.fifties &&
+                        this.hundreds == temp.hundreds)
                     return true;
                 else
                     return false;
@@ -166,7 +177,6 @@ public class ATM extends Object {
                 throw new IllegalArgumentException();
         } else
             throw new IllegalArgumentException();
-
     }
 
     /******
@@ -184,7 +194,8 @@ public class ATM extends Object {
         if (other1 == null || other2 == null)
             throw new IllegalArgumentException();
 
-        if (other1.twenties == other2.twenties && other1.fifties == other2.fifties
+        if (other1.twenties == other2.twenties &&
+                other1.fifties == other2.fifties
                 && other1.hundreds == other2.hundreds) {
             return true;
         } else {
@@ -215,7 +226,7 @@ public class ATM extends Object {
     }
 
     /**********
-     * A method that compare ATM object other 1 to ATM object other 2.
+     * A method that compare ATM object other 1 to ATM object other 2
      *
      * @param other1 an ATM object
      * @param other2 an ATM object
@@ -278,12 +289,15 @@ public class ATM extends Object {
     }
 
     /*******
-     * A method that subtracts the parameters from the "this" ATM object.
+     * A method that subtracts the params from the "this" ATM object.
      *
-     * @param hundreds the number of hundreds take out from this ATM object
-     * @param fifties the number of fifties take out from this ATM object
-     * @param twenties the number of twenties take out from this ATM object
-     * @throws IllegalArgumentException if the parameters are negative and
+     * @param hundreds the number of hundreds
+     *                taken out from this ATM object
+     * @param fifties the number of fifties
+     *               taken out from this ATM object
+     * @param twenties the number of twenties
+     *                 taken out from this ATM object
+     * @throws IllegalArgumentException if the params are negative or
      * the number of bills in this ATM is not enough
      * @return none if the ATM is suspended
      */
@@ -293,7 +307,8 @@ public class ATM extends Object {
             return;
         if (hundreds < 0 || fifties < 0 || twenties < 0)
             throw new IllegalArgumentException();
-        if (this.hundreds < hundreds || this.fifties < fifties || this.twenties < twenties)
+        if (this.hundreds < hundreds || this.fifties < fifties
+                || this.twenties < twenties)
             throw new IllegalArgumentException();
 
         this.hundreds -= hundreds;
@@ -302,7 +317,7 @@ public class ATM extends Object {
     }
 
     /*****
-     * A method that subtracts ATM other to the “this” ATM object.
+     * A method that subtracts ATM other from the “this” ATM object.
      *
      * @param other an ATM object
      * @throws IllegalArgumentException if parameter is null and
@@ -315,7 +330,8 @@ public class ATM extends Object {
             return;
         if (other == null)
             throw new IllegalArgumentException();
-        if (this.hundreds < other.hundreds || this.fifties < other.fifties
+        if (this.hundreds < other.hundreds
+                || this.fifties < other.fifties
                 || this.twenties < other.twenties)
             throw new IllegalArgumentException();
 
@@ -329,11 +345,11 @@ public class ATM extends Object {
      * hundreds, fifties, twenties withdrawn from “this” ATM.
      *
      * @param totalAmount the amount of money needed to take
-     * out from this ATM
+     * out from "this" ATM
      * @throws IllegalArgumentException if the parameter is negative,
-     * not divisible for 10 or
-     * there is insufficient amount in this ATM
-     * @return temp a new ATM object
+     * not divisible by 10 or
+     * there are insufficient amount in this ATM
+     * @return a new ATM object with the total amount taken out
      */
     public ATM takeOut(int totalAmount) {
 
@@ -341,46 +357,27 @@ public class ATM extends Object {
             return null;
 
         if (convertToDollars(this) < totalAmount || totalAmount < 0 ||
-                (totalAmount == 10) || (totalAmount == 30) || (totalAmount % 10) != 0)
+                (totalAmount == 10) || (totalAmount == 30) ||
+                (totalAmount % 10) != 0)
             throw new IllegalArgumentException();
 
-        int hund = 0, fif = 0, twent = 0;
+        if (totalAmount <= (this.hundreds * 100 + this.fifties * 50
+                + this.twenties * 20)) {
+            for (int a2 = this.hundreds; a2 >= 0; a2--) {
+                for (int b2 = this.fifties; b2 >= 0; b2--) {
+                    for (int c2 = this.twenties; c2 >= 0; c2--) {
 
-        while (hund < this.hundreds && (totalAmount == 100 || totalAmount >= 120)) {
-            totalAmount = totalAmount - 100;
-            hund++;
+                        if((a2 *100 + b2 *50 + c2 *20) == totalAmount){
+                            this.hundreds -= a2;
+                            this.fifties -= b2;
+                            this.twenties -= c2;
+                            return new ATM(a2, b2, c2);
+                        }
+                    }
+                }
+            }
         }
-
-        if (totalAmount == 30 || totalAmount == 10) {
-            totalAmount = totalAmount + 100;
-            hund--;
-        }
-
-        while (fif < this.fifties && (totalAmount == 50 || totalAmount >= 70)) {
-            totalAmount = totalAmount - 50;
-            fif++;
-        }
-
-        if (totalAmount == 30 || totalAmount == 10) {
-            totalAmount = totalAmount + 50;
-            fif--;
-        }
-
-        while (twent < this.twenties && totalAmount >= 20 && (totalAmount % 20 == 0)) {
-            totalAmount = totalAmount - 20;
-            twent++;
-        }
-
-        if (totalAmount == 0) {
-            this.hundreds = this.hundreds - hund;
-            this.fifties = this.fifties - fif;
-            this.twenties = this.twenties - twent;
-
-            ATM temp = new ATM(hund, fif, twent);
-            return temp;
-        } else {
-            throw new IllegalArgumentException();
-        }
+        throw new IllegalArgumentException();
     }
 
     /*****
@@ -417,11 +414,11 @@ public class ATM extends Object {
         try {
             out = new PrintWriter(new BufferedWriter(new FileWriter(
                     fileName)));
-            out.write(this.hundreds + " " + this.fifties + " " + this.twenties);
+            out.write(this.hundreds + " " + this.fifties + " " +
+                    this.twenties);
         } catch (IOException e) {
             throw new IllegalArgumentException();
         }
-
         out.close();
     }
 
@@ -431,12 +428,11 @@ public class ATM extends Object {
      * @param fileName an input file type string
      * @throws IllegalArgumentException if it can't find the file
      */
-    public void load(String fileName) {
+    public void load(String fileName){
 
         Scanner scanner = null;
         try {
             scanner = new Scanner(new File(fileName));
-            //scanner.useDelimiter(",");
             hundreds = scanner.nextInt();
             fifties = scanner.nextInt();
             twenties = scanner.nextInt();
@@ -451,7 +447,8 @@ public class ATM extends Object {
     /****
      * A method that turns ‘off’ or ‘on’ any takeOut/putIn methods in.
      *
-     * @param on an input condition (true or false) for suspend variable
+     * @param on an input condition (true or false)
+     *          for suspend variable
      */
     public static void suspend(Boolean on) {
 
@@ -461,8 +458,8 @@ public class ATM extends Object {
             suspend = false;
         }
     }
-    
-     /**
+
+    /**
      * A getter method for suspend variable (true or false).
      *
      * @return suspend an instance variable that returns true or false
@@ -490,12 +487,13 @@ public class ATM extends Object {
      * A method that adds an amount of money to this ATM object.
      *
      * @param amount an input amount of money in type string
-     * @throws IllegalArgumentException if the input string is missing or
-     *                                  the string is not digit or
-     *                                  the amount is negative or
-     *                                  the leftover amount is different than zero
+     * @throws IllegalArgumentException if the input string is missing
+     * or the string is not digit or the amount is negative or
+     * the leftover amount is different than zero
      */
     public void putIn(String amount) {
+        if(suspend)
+            return;
 
         if (amount.length() == 0 || !isNumeric(amount))
             throw new IllegalArgumentException();

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.text.NumberFormat;
 
 /**
@@ -40,8 +41,9 @@ public class ATMPanel extends JPanel {
 //		loc.gridy = 3;
 //		loc.insets.bottom = 0;
 //		loc.insets.top = 0;
+		add( new JLabel(""));
+
 		add(new JLabel("Interact with ATM"));
-		add(new JLabel(""));
 
 		add(new JLabel("Hundreds:"), loc);
 		hundredField = new JTextField("0", 3);
@@ -64,6 +66,7 @@ public class ATMPanel extends JPanel {
 //		takeOutHFTButton = new JButton("Take Out with H,F,T");
 //		add(takeOutHFTButton);
 
+
 		withdrawBillsButton = new JButton("Withdraw Bills");
 		add(withdrawBillsButton);
 
@@ -79,10 +82,11 @@ public class ATMPanel extends JPanel {
 		loadButton = new JButton("Load ATM");
 		add(loadButton);
 
-		add(new JLabel(""));
+		add( new JLabel(""));
+		add( new JLabel(""));
+
 
 		add(new JLabel("Current State ATM"));
-		add(new JLabel(""));
 
 
 		add(new JLabel("Total: "));
@@ -90,15 +94,18 @@ public class ATMPanel extends JPanel {
 		totalIN.setEditable(false);
 		add(totalIN);
 
+
 		add(new JLabel("Hundreds: "));
 		hundsIN = new JTextField("" + jar.getHundreds(), 3);
 		hundsIN.setEditable(false);
 		add(hundsIN);
 
+
 		add(new JLabel("Fifties: "));
 		fiftsIN = new JTextField("" + jar.getFifties(), 3);
 		fiftsIN.setEditable(false);
 		add(fiftsIN);
+
 
 		add(new JLabel("Twenties: "));
 		twentsIN = new JTextField("" + jar.getTwenties(), 3);
@@ -179,12 +186,47 @@ public class ATMPanel extends JPanel {
 				}
 			}
 			if(event.getSource() == saveButton){
-				jar.save("ATM");
-			}
+				JFrame parentFrame = new JFrame();
+
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to save");
+
+
+				int userSelection = fileChooser.showSaveDialog(parentFrame);
+
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+					File fileToSave = fileChooser.getSelectedFile();
+					String filename = fileChooser.getSelectedFile().getName();
+					jar.save(filename);
+					System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+				}
+				}
+
 			if(event.getSource() == loadButton){
-				jar.load("ATM");
+				JFrame parentFrame = new JFrame();
+				String userDir = System.getProperty("user.dir");
+				JFileChooser fc = new JFileChooser(userDir);
+
+				int returnVal = fc.showOpenDialog(parentFrame);
+
+				// did the user select a file?
+
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					try {
+						String filename = fc.getSelectedFile().getName();
+						jar.load(filename);
+						hundsIN.setText("" + jar.getHundreds());
+						fiftsIN.setText("" + jar.getFifties());
+						twentsIN.setText("" + jar.getTwenties());
+						totalIN.setText("" + fmt.format(convertToTotal(jar)));
+					} catch (IllegalArgumentException e) {
+						JOptionPane.showMessageDialog(null, "Try a different file");
+					}
+				}
+
 			}
 		}
 	}
 }
+
 

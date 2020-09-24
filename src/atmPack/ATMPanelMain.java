@@ -45,12 +45,10 @@ public class ATMPanelMain extends JPanel {
                 else {
                     ATM.suspend(true);
                 }
-                }
-
             }
         }
-
     }
+}
 
 
 
